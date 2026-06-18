@@ -5,51 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ 自動投稿</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
-  .container { max-width: 640px; margin: 0 auto; }
-  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-  .steps { display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; font-size: 12px; color: #888; }
-  .step { display: flex; align-items: center; gap: 5px; }
-  .step-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; background: #fff; }
-  .step.active { color: #1a1a1a; font-weight: 600; }
-  .step.active .step-dot { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .step.done .step-dot { background: #3b6d11; color: #fff; border-color: #3b6d11; }
-  .sdivider { flex: 1; height: 1px; background: #ddd; }
-  .card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
-  .field { margin-bottom: 1rem; }
-  .field:last-child { margin-bottom: 0; }
-  label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; }
-  label .req { color: #e24b4a; margin-left: 2px; }
-  select, input, textarea { width: 100%; font-size: 14px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; transition: border-color 0.15s; }
-  select:focus, input:focus, textarea:focus { border-color: #888; }
-  textarea { min-height: 80px; resize: vertical; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
-  .btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.15s, background 0.15s; font-family: inherit; margin-bottom: 8px; }
-  .btn-secondary { background: #fff; border: 1px solid #ccc; color: #333; }
-  .btn-secondary:hover { background: #f5f5f3; }
-  .btn-primary { background: #1a1a1a; border: 1px solid #1a1a1a; color: #fff; }
-  .btn-primary:hover { background: #333; }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .preview { background: #f5f5f3; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; margin-top: 1rem; display: none; }
-  .preview.show { display: block; }
-  .preview-header { background: #eaf3de; color: #27500a; font-size: 12px; font-weight: 600; padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
-  .preview-row { padding: 10px 14px; display: flex; gap: 10px; border-top: 1px solid #e5e5e5; }
-  .preview-row:first-of-type { border-top: none; }
-  .ptag { font-size: 11px; font-weight: 700; width: 16px; flex-shrink: 0; margin-top: 2px; }
-  .ptag.q { color: #185fa5; }
-  .ptag.a { color: #3b6d11; }
-  .ptext { font-size: 13px; line-height: 1.65; color: #1a1a1a; }
-  .note { font-size: 12px; color: #999; text-align: center; margin-top: 4px; }
-  .spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; flex-shrink: 0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+.container { max-width: 640px; margin: 0 auto; }
+h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+.card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+.field { margin-bottom: 1rem; }
+.field:last-child { margin-bottom: 0; }
+label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; }
+label .req { color: #e24b4a; margin-left: 2px; }
+select, input, textarea { width: 100%; font-size: 14px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; -webkit-appearance: none; }
+select:focus, input:focus, textarea:focus { border-color: #888; }
+textarea { min-height: 80px; resize: vertical; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+.steps { display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; font-size: 12px; color: #999; }
+.step { display: flex; align-items: center; gap: 5px; }
+.step-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; background: #fff; }
+.step.active { color: #1a1a1a; font-weight: 600; }
+.step.active .step-dot { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.step.done .step-dot { background: #3b6d11; color: #fff; border-color: #3b6d11; }
+.sdivider { flex: 1; height: 1px; background: #e5e5e5; }
+.btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; margin-bottom: 8px; border: none; transition: background 0.15s; }
+.btn-format { background: #f0f0ee; color: #333; }
+.btn-format:hover { background: #e5e5e3; }
+.btn-post { background: #1a1a1a; color: #fff; }
+.btn-post:hover { background: #333; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.preview { background: #f5f5f3; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; margin-top: 1rem; display: none; }
+.preview.show { display: block; }
+.preview-header { background: #eaf3de; color: #27500a; font-size: 12px; font-weight: 600; padding: 8px 14px; }
+.preview-row { padding: 10px 14px; display: flex; gap: 10px; border-top: 1px solid #e5e5e5; }
+.ptag { font-size: 11px; font-weight: 700; width: 16px; flex-shrink: 0; margin-top: 2px; }
+.ptag.q { color: #185fa5; }
+.ptag.a { color: #3b6d11; }
+.ptext { font-size: 13px; line-height: 1.65; }
+.status { border-radius: 8px; padding: 12px 14px; font-size: 13px; margin-top: 8px; display: none; align-items: center; gap: 8px; }
+.status.loading { background: #f0f0ee; color: #666; display: flex; }
+.status.success { background: #eaf3de; color: #27500a; display: flex; }
+.status.error { background: #fcebeb; color: #791f1f; display: flex; }
+.spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+a.notion-link { color: #185fa5; font-weight: 600; text-decoration: none; }
+a.notion-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>FAQ 自動投稿</h1>
+  <h1>📋 FAQ 自動投稿</h1>
   <p class="subtitle">入力 → 文章調整・確認 → Notionに投稿</p>
 
   <div class="steps">
@@ -109,6 +113,8 @@
       <textarea id="a-raw" placeholder="例：工事一覧から対象を開いて右上メニューから削除できる"></textarea>
     </div>
 
+    <button class="btn btn-format" id="fmt-btn" onclick="formatWithAI()">✦ 文章を整える</button>
+
     <div class="preview" id="preview">
       <div class="preview-header">✓ 整形完了 — 内容を確認してください</div>
       <div class="preview-row"><span class="ptag q">Q</span><span class="ptext" id="pq"></span></div>
@@ -116,13 +122,14 @@
     </div>
   </div>
 
-  <button class="btn btn-secondary" id="fmt-btn" onclick="formatWithAI()">✦ 文章を整える</button>
-  <button class="btn btn-primary" id="post-btn" onclick="copyToClipboard()" disabled>✓ 確認OK — 投稿内容をコピーする</button>
-  <p class="note">コピーした内容をClaudeのチャットに貼り付けると投稿されます</p>
+  <button class="btn btn-post" id="post-btn" onclick="postToNotion()" disabled>Notionに投稿する</button>
+  <div class="status" id="status"></div>
 </div>
 
 <script>
-let fmtQ = '', fmtA = '';
+const NOTION_TOKEN = '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';
+const ANTHROPIC_KEY = '';
+let fmtQ = '', fmtA = '', currentTitle = '';
 
 function setStep(n) {
   for (let i = 1; i <= 3; i++) {
@@ -131,6 +138,12 @@ function setStep(n) {
     el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
     dot.textContent = i < n ? '✓' : i;
   }
+}
+
+function showStatus(type, html) {
+  const el = document.getElementById('status');
+  el.className = 'status ' + type;
+  el.innerHTML = type === 'loading' ? '<div class="spinner"></div><span>' + html + '</span>' : '<span>' + html + '</span>';
 }
 
 function validate() {
@@ -143,23 +156,24 @@ function validate() {
 
 async function formatWithAI() {
   if (!validate()) return;
-  const btn = document.getElementById('fmt-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> 整形中...';
-  setStep(2);
-
   const title = document.getElementById('q-title').value.trim();
   const rawQ = document.getElementById('q-raw').value.trim();
   const rawA = document.getElementById('a-raw').value.trim();
+  currentTitle = title;
+
+  const btn = document.getElementById('fmt-btn');
+  btn.disabled = true;
+  btn.textContent = '整形中...';
+  setStep(2);
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
-        messages: [{ role: 'user', content: `以下のFAQ内容をユーザー向けNotionページ用に整えてください。\nタイトル: ${title}\n質問: ${rawQ}\n回答: ${rawA}\n\nJSONのみ返してください（他テキスト不要）:\n{"question":"整形後の質問文","answer":"整形後の回答文（Markdown可）"}` }]
+        messages: [{ role: 'user', content: `以下のFAQ内容をユーザー向けNotionページ用に整えてください。\nタイトル: ${title}\n質問: ${rawQ}\n回答: ${rawA}\n\nJSONのみ返してください（他テキスト不要）:\n{"question":"整形後の質問文","answer":"整形後の回答文"}` }]
       })
     });
     const data = await res.json();
@@ -173,26 +187,75 @@ async function formatWithAI() {
     document.getElementById('post-btn').disabled = false;
     setStep(3);
   } catch(e) {
-    alert('整形エラー: ' + e.message);
-    setStep(1);
+    fmtQ = rawQ;
+    fmtA = rawA;
+    document.getElementById('pq').textContent = fmtQ;
+    document.getElementById('pa').innerHTML = fmtA.replace(/\n/g, '<br>');
+    document.getElementById('preview').classList.add('show');
+    document.getElementById('post-btn').disabled = false;
+    setStep(3);
   }
   btn.disabled = false;
-  btn.innerHTML = '✦ 再整形する';
+  btn.textContent = '✦ 再整形する';
 }
 
-function copyToClipboard() {
+async function postToNotion() {
   const catVal = document.getElementById('category').value;
-  const catName = catVal.split('|')[0];
   const pageId = catVal.split('|')[1];
-  const title = document.getElementById('q-title').value.trim();
-  const rawQ = document.getElementById('q-raw').value.trim();
-  const rawA = document.getElementById('a-raw').value.trim();
-  const msg = `【FAQ投稿依頼】\nカテゴリ: ${catName}\nページID: ${pageId}\nタイトル: ${title}\n質問（メモ）: ${rawQ}\n回答（メモ）: ${rawA}`;
-  navigator.clipboard.writeText(msg).then(() => {
-    const btn = document.getElementById('post-btn');
-    btn.innerHTML = '✓ コピーしました！';
-    setTimeout(() => { btn.innerHTML = '✓ 確認OK — 投稿内容をコピーする'; }, 2000);
-  });
+  const title = currentTitle || document.getElementById('q-title').value.trim();
+
+  document.getElementById('post-btn').disabled = true;
+  showStatus('loading', '投稿しています...');
+
+  const content = `## Q\n\n${fmtQ}\n\n## A\n\n${fmtA}`;
+  const blocks = buildBlocks(content);
+
+  try {
+    const res = await fetch('https://api.notion.com/v1/pages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + NOTION_TOKEN,
+        'Notion-Version': '2022-06-28'
+      },
+      body: JSON.stringify({
+        parent: { page_id: pageId },
+        icon: { type: 'emoji', emoji: '✔️' },
+        properties: { title: { title: [{ text: { content: title } }] } },
+        children: blocks
+      })
+    });
+    const data = await res.json();
+    if (data.url) {
+      showStatus('success', '✓ 投稿完了！ <a class="notion-link" href="' + data.url + '" target="_blank">Notionで確認する</a>');
+      setStep(3);
+      document.querySelector('#s3').className = 'step done';
+      document.querySelector('#s3 .step-dot').textContent = '✓';
+    } else {
+      throw new Error(data.message || '投稿に失敗しました');
+    }
+  } catch(e) {
+    showStatus('error', '❌ エラー: ' + e.message);
+    document.getElementById('post-btn').disabled = false;
+  }
+}
+
+function buildBlocks(md) {
+  const blocks = [];
+  const lines = md.split('\n');
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      blocks.push({ object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: line.replace('## ', '') } }] } });
+    } else if (line.trim() === '') {
+      blocks.push({ object: 'block', type: 'paragraph', paragraph: { rich_text: [] } });
+    } else if (line.startsWith('- ') || line.match(/^\d+\. /)) {
+      const text = line.replace(/^- /, '').replace(/^\d+\. /, '');
+      blocks.push({ object: 'block', type: 'bulleted_list_item', bulleted_list_item: { rich_text: [{ type: 'text', text: { content: text } }] } });
+    } else {
+      blocks.push({ object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: line } }] } });
+    }
+  }
+  return blocks.slice(0, 100);
 }
 </script>
 </body>
