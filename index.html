@@ -15,7 +15,6 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
 .field:last-child { margin-bottom: 0; }
 label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; }
 label .req { color: #e24b4a; margin-left: 2px; }
-label .hint { font-size: 11px; color: #999; margin-left: 6px; font-weight: normal; }
 select, input, textarea { width: 100%; font-size: 14px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; -webkit-appearance: none; }
 select:focus, input:focus, textarea:focus { border-color: #888; }
 textarea { min-height: 80px; resize: vertical; }
@@ -121,11 +120,11 @@ a.notion-link:hover { text-decoration: underline; }
       <div class="preview-header">✓ 調整完了 — 内容を確認・編集してください</div>
       <div class="preview-row">
         <span class="ptag q">Q</span>
-        <textarea class="edit" id="pq" rows="2" oninput="syncEdit()"></textarea>
+        <textarea class="edit" id="pq" rows="2"></textarea>
       </div>
       <div class="preview-row">
         <span class="ptag a">A</span>
-        <textarea class="edit" id="pa" rows="4" oninput="syncEdit()"></textarea>
+        <textarea class="edit" id="pa" rows="4"></textarea>
       </div>
     </div>
   </div>
@@ -135,7 +134,7 @@ a.notion-link:hover { text-decoration: underline; }
 </div>
 
 <script>
-const NOTION_TOKEN = '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';
+const WORKER_URL = 'https://faq-proxy.haneka-tooyama.workers.dev';
 let currentTitle = '';
 
 function setStep(n) {
@@ -152,8 +151,6 @@ function showStatus(type, html) {
   el.className = 'status ' + type;
   el.innerHTML = type === 'loading' ? '<div class="spinner"></div><span>' + html + '</span>' : '<span>' + html + '</span>';
 }
-
-function syncEdit() {}
 
 function validate() {
   if (!document.getElementById('category').value) { alert('カテゴリを選択してください'); return false; }
@@ -176,9 +173,9 @@ async function formatWithAI() {
   setStep(2);
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' },
+      headers: { 'Content-Type': 'application/json', 'x-target': 'anthropic' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
@@ -212,17 +209,12 @@ async function postToNotion() {
   document.getElementById('post-btn').disabled = true;
   showStatus('loading', '投稿しています...');
 
-  const content = `## Q\n\n${fmtQ}\n\n## A\n\n${fmtA}`;
-  const blocks = buildBlocks(content);
+  const blocks = buildBlocks(`## Q\n\n${fmtQ}\n\n## A\n\n${fmtA}`);
 
   try {
-    const res = await fetch('https://api.notion.com/v1/pages', {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + NOTION_TOKEN,
-        'Notion-Version': '2022-06-28'
-      },
+      headers: { 'Content-Type': 'application/json', 'x-target': 'notion' },
       body: JSON.stringify({
         parent: { page_id: pageId },
         icon: { type: 'emoji', emoji: '✔️' },
