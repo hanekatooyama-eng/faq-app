@@ -19,9 +19,6 @@ select, input, textarea { width: 100%; font-size: 14px; padding: 8px 12px; borde
 select:focus, input:focus, textarea:focus { border-color: #888; }
 textarea { min-height: 80px; resize: vertical; }
 textarea.edit { min-height: 60px; background: #fffef5; border-color: #d4c47a; }
-textarea.edit:focus { border-color: #b8a43e; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
 .steps { display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; font-size: 12px; color: #999; }
 .step { display: flex; align-items: center; gap: 5px; }
 .step-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; background: #fff; }
@@ -29,16 +26,14 @@ textarea.edit:focus { border-color: #b8a43e; }
 .step.active .step-dot { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
 .step.done .step-dot { background: #3b6d11; color: #fff; border-color: #3b6d11; }
 .sdivider { flex: 1; height: 1px; background: #e5e5e5; }
-.btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; margin-bottom: 8px; border: none; transition: background 0.15s; }
+.btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; margin-bottom: 8px; border: none; }
 .btn-format { background: #f0f0ee; color: #333; }
-.btn-format:hover { background: #e5e5e3; }
 .btn-post { background: #1a1a1a; color: #fff; }
-.btn-post:hover { background: #333; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .preview { background: #f5f5f3; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; margin-top: 1rem; display: none; }
 .preview.show { display: block; }
 .preview-header { background: #eaf3de; color: #27500a; font-size: 12px; font-weight: 600; padding: 8px 14px; }
-.preview-row { padding: 10px 14px; display: flex; gap: 10px; border-top: 1px solid #e5e5e5; align-items: flex-start; }
+.preview-row { padding: 10px 14px; display: flex; gap: 10px; border-top: 1px solid #e5e5e5; }
 .ptag { font-size: 11px; font-weight: 700; width: 16px; flex-shrink: 0; margin-top: 10px; }
 .ptag.q { color: #185fa5; }
 .ptag.a { color: #3b6d11; }
@@ -49,83 +44,68 @@ textarea.edit:focus { border-color: #b8a43e; }
 .spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 a.notion-link { color: #185fa5; font-weight: 600; text-decoration: none; }
-a.notion-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>📋 FAQ 自動投稿</h1>
-  <p class="subtitle">入力 → 文章調整・確認 → Notionに投稿</p>
+  <p class="subtitle">入力 → 確認・編集 → Notionに投稿</p>
 
   <div class="steps">
     <div class="step active" id="s1"><div class="step-dot">1</div>入力</div>
     <div class="sdivider"></div>
-    <div class="step" id="s2"><div class="step-dot">2</div>文章調整・確認</div>
+    <div class="step" id="s2"><div class="step-dot">2</div>確認・編集</div>
     <div class="sdivider"></div>
     <div class="step" id="s3"><div class="step-dot">3</div>Notion投稿</div>
   </div>
 
   <div class="card">
-    <div class="row">
-      <div class="field">
-        <label>カテゴリ<span class="req">*</span></label>
-        <select id="category">
-          <option value="">選択してください</option>
-          <option value="基本操作に関するご質問|fb0b4ccd-4009-464f-854b-97081c0333b2">基本操作</option>
-          <option value="ダッシュボードに関するご質問|b52281f4-7c1f-4837-a3ab-7a53ecbb1727">ダッシュボード</option>
-          <option value="フォルダに関するご質問|6886d0f9-71a3-4bcf-a9ca-f55c322617d4">フォルダ</option>
-          <option value="メール送信に関するご質問|013d760d-42d7-4f48-bf8d-409f98a86a24">メール送信</option>
-          <option value="顧客データに関するご質問|f16c69b4-2a42-4530-a3ec-0354eb735b81">顧客データ</option>
-          <option value="業者データに関するご質問|a86f7d28-b082-412c-a207-00a40d3c1b10">業者データ</option>
-          <option value="工事に関するご質問|ec946c0f-5285-44a2-9874-4854bf7abd29">工事</option>
-          <option value="日報機能に関するご質問|3268e736-b1a6-8034-85c7-dba2f242fa6c">日報機能</option>
-          <option value="工程表作成に関するご質問|4021df5c-50dc-4fdd-9cde-67b9ca0fc40b">工程表作成</option>
-          <option value="カレンダー機能に関するご質問|101e2bbe-a780-4ae6-a743-6edbeba93bf5">カレンダー機能</option>
-          <option value="現場連絡表に関するご質問|6fb50446-d60d-42be-ab66-539b3e47ac47">現場連絡表</option>
-          <option value="資料に関するご質問|b174d68e-6f96-4465-8eab-9de8a772f76b">資料</option>
-          <option value="写真に関するご質問|a6a94a68-fba9-4f21-b23b-bbfe5c4726b4">写真</option>
-          <option value="ファイルに関するご質問|e576052a-89c7-48b7-bd1b-9ad8aa344ea2">ファイル</option>
-          <option value="外部ファイル共有（CONOCユーザー）|3258e736-b1a6-81d7-9c0b-d3496277dfad">外部ファイル共有（CONOCユーザー）</option>
-          <option value="外部ファイル共有（ゲスト）|aa6bebb6-dd2b-48c2-bda4-57960a009c34">外部ファイル共有（ゲスト）</option>
-          <option value="見積に関するご質問|5194e525-2bb2-4804-aef3-d07883f0663e">見積</option>
-          <option value="実行予算管理機能に関するご質問|f9038dac-aa54-47a1-953c-fcd0b6cd603f">実行予算管理</option>
-          <option value="発注に関するご質問|be529fbd-439a-4115-bdd9-023d20806211">発注</option>
-          <option value="契約に関するご質問|4b286577-cc5f-4607-82bc-bae80eff5b9d">契約</option>
-          <option value="請求に関するご質問|f2787843-38a4-48f5-babf-807baf67a268">請求</option>
-          <option value="インボイスに関するご質問|1298e736-b1a6-80f0-9a93-e9324d94ccf7">インボイス</option>
-          <option value="電子契約に関するご質問|42fe3462-1474-45de-af8a-fbdd06151cb9">電子契約</option>
-          <option value="電子帳簿保存法に関するご質問|0a7a83c4-9f66-433a-803e-2edadff88f3a">電子帳簿保存法</option>
-          <option value="その他のご質問|21a9a51e-e146-4f11-a139-370f3df588f6">その他</option>
-          <option value="セキュリティに関するご質問|037985a0-9b02-4166-89bc-f2989814971b">セキュリティ</option>
-          <option value="プライバシーポリシー・利用規約|bb58d31f-a1ca-49b3-95ad-c5a5a8991aa8">プライバシーポリシー・利用規約</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>質問タイトル<span class="req">*</span></label>
-        <input type="text" id="q-title" placeholder="例：工事を削除するには？" />
-      </div>
+    <div class="field">
+      <label>カテゴリ<span class="req">*</span></label>
+      <select id="category">
+        <option value="">選択してください</option>
+        <option value="基本操作に関するご質問|fb0b4ccd-4009-464f-854b-97081c0333b2">基本操作</option>
+        <option value="ダッシュボードに関するご質問|b52281f4-7c1f-4837-a3ab-7a53ecbb1727">ダッシュボード</option>
+        <option value="フォルダに関するご質問|6886d0f9-71a3-4bcf-a9ca-f55c322617d4">フォルダ</option>
+        <option value="メール送信に関するご質問|013d760d-42d7-4f48-bf8d-409f98a86a24">メール送信</option>
+        <option value="顧客データに関するご質問|f16c69b4-2a42-4530-a3ec-0354eb735b81">顧客データ</option>
+        <option value="業者データに関するご質問|a86f7d28-b082-412c-a207-00a40d3c1b10">業者データ</option>
+        <option value="工事に関するご質問|ec946c0f-5285-44a2-9874-4854bf7abd29">工事</option>
+        <option value="日報機能に関するご質問|3268e736-b1a6-8034-85c7-dba2f242fa6c">日報機能</option>
+        <option value="工程表作成に関するご質問|4021df5c-50dc-4fdd-9cde-67b9ca0fc40b">工程表作成</option>
+        <option value="カレンダー機能に関するご質問|101e2bbe-a780-4ae6-a743-6edbeba93bf5">カレンダー機能</option>
+        <option value="現場連絡表に関するご質問|6fb50446-d60d-42be-ab66-539b3e47ac47">現場連絡表</option>
+        <option value="資料に関するご質問|b174d68e-6f96-4465-8eab-9de8a772f76b">資料</option>
+        <option value="写真に関するご質問|a6a94a68-fba9-4f21-b23b-bbfe5c4726b4">写真</option>
+        <option value="ファイルに関するご質問|e576052a-89c7-48b7-bd1b-9ad8aa344ea2">ファイル</option>
+        <option value="外部ファイル共有（CONOCユーザー）|3258e736-b1a6-81d7-9c0b-d3496277dfad">外部ファイル共有（CONOCユーザー）</option>
+        <option value="外部ファイル共有（ゲスト）|aa6bebb6-dd2b-48c2-bda4-57960a009c34">外部ファイル共有（ゲスト）</option>
+        <option value="見積に関するご質問|5194e525-2bb2-4804-aef3-d07883f0663e">見積</option>
+        <option value="実行予算管理機能に関するご質問|f9038dac-aa54-47a1-953c-fcd0b6cd603f">実行予算管理</option>
+        <option value="発注に関するご質問|be529fbd-439a-4115-bdd9-023d20806211">発注</option>
+        <option value="契約に関するご質問|4b286577-cc5f-4607-82bc-bae80eff5b9d">契約</option>
+        <option value="請求に関するご質問|f2787843-38a4-48f5-babf-807baf67a268">請求</option>
+        <option value="インボイスに関するご質問|1298e736-b1a6-80f0-9a93-e9324d94ccf7">インボイス</option>
+        <option value="電子契約に関するご質問|42fe3462-1474-45de-af8a-fbdd06151cb9">電子契約</option>
+        <option value="電子帳簿保存法に関するご質問|0a7a83c4-9f66-433a-803e-2edadff88f3a">電子帳簿保存法</option>
+        <option value="その他のご質問|21a9a51e-e146-4f11-a139-370f3df588f6">その他</option>
+        <option value="セキュリティに関するご質問|037985a0-9b02-4166-89bc-f2989814971b">セキュリティ</option>
+        <option value="プライバシーポリシー・利用規約|bb58d31f-a1ca-49b3-95ad-c5a5a8991aa8">プライバシーポリシー・利用規約</option>
+      </select>
     </div>
     <div class="field">
-      <label>質問の内容（メモ書きでOK）<span class="req">*</span></label>
+      <label>質問の内容<span class="req">*</span></label>
       <textarea id="q-raw" placeholder="例：工事案件を削除したい"></textarea>
     </div>
     <div class="field">
-      <label>回答の内容（メモ書きでOK）<span class="req">*</span></label>
-      <textarea id="a-raw" placeholder="例：工事一覧から対象を開いて右上メニューから削除できる"></textarea>
+      <label>回答の内容<span class="req">*</span></label>
+      <textarea id="a-raw" placeholder="例：工事一覧から右上メニューから削除できる"></textarea>
     </div>
-
-    <button class="btn btn-format" id="fmt-btn" onclick="formatWithAI()">✦ 文章を整える</button>
-
+    <button class="btn btn-format" id="fmt-btn" onclick="showPreview()">確認・編集する</button>
     <div class="preview" id="preview">
-      <div class="preview-header">✓ 調整完了 — 内容を確認・編集してください</div>
-      <div class="preview-row">
-        <span class="ptag q">Q</span>
-        <textarea class="edit" id="pq" rows="2"></textarea>
-      </div>
-      <div class="preview-row">
-        <span class="ptag a">A</span>
-        <textarea class="edit" id="pa" rows="4"></textarea>
-      </div>
+      <div class="preview-header">✓ 確認・編集してください</div>
+      <div class="preview-row"><span class="ptag q">Q</span><textarea class="edit" id="pq" rows="2"></textarea></div>
+      <div class="preview-row"><span class="ptag a">A</span><textarea class="edit" id="pa" rows="4"></textarea></div>
     </div>
   </div>
 
@@ -134,15 +114,13 @@ a.notion-link:hover { text-decoration: underline; }
 </div>
 
 <script>
-const WORKER_URL = 'https://faq-proxy.haneka-tooyama.workers.dev';
-let currentTitle = '';
+const WORKER = 'https://faq-proxy.haneka-tooyama.workers.dev';
 
 function setStep(n) {
   for (let i = 1; i <= 3; i++) {
     const el = document.getElementById('s' + i);
-    const dot = el.querySelector('.step-dot');
     el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
-    dot.textContent = i < n ? '✓' : i;
+    el.querySelector('.step-dot').textContent = i < n ? '✓' : i;
   }
 }
 
@@ -152,74 +130,57 @@ function showStatus(type, html) {
   el.innerHTML = type === 'loading' ? '<div class="spinner"></div><span>' + html + '</span>' : '<span>' + html + '</span>';
 }
 
-function validate() {
-  if (!document.getElementById('category').value) { alert('カテゴリを選択してください'); return false; }
-  if (!document.getElementById('q-title').value.trim()) { alert('質問タイトルを入力してください'); return false; }
-  if (!document.getElementById('q-raw').value.trim()) { alert('質問の内容を入力してください'); return false; }
-  if (!document.getElementById('a-raw').value.trim()) { alert('回答の内容を入力してください'); return false; }
-  return true;
-}
-
-async function formatWithAI() {
-  if (!validate()) return;
-  const title = document.getElementById('q-title').value.trim();
-  const rawQ = document.getElementById('q-raw').value.trim();
-  const rawA = document.getElementById('a-raw').value.trim();
-  currentTitle = title;
-
-  const btn = document.getElementById('fmt-btn');
-  btn.disabled = true;
-  btn.textContent = '調整中...';
-  setStep(2);
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: `以下のFAQ内容をユーザー向けNotionページ用に整えてください。\nタイトル: ${title}\n質問: ${rawQ}\n回答: ${rawA}\n\nJSONのみ返してください（他テキスト不要）:\n{"question":"整形後の質問文","answer":"整形後の回答文"}` }]
-      })
-    });
-    const data = await res.json();
-    const text = data.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(text);
-    document.getElementById('pq').value = parsed.question;
-    document.getElementById('pa').value = parsed.answer;
-  } catch(e) {
-    document.getElementById('pq').value = rawQ;
-    document.getElementById('pa').value = rawA;
-  }
-
+function showPreview() {
+  const cat = document.getElementById('category').value;
+  const q = document.getElementById('q-raw').value.trim();
+  const a = document.getElementById('a-raw').value.trim();
+  if (!cat) { alert('カテゴリを選択してください'); return; }
+  if (!q || !a) { alert('質問と回答を入力してください'); return; }
+  document.getElementById('pq').value = q;
+  document.getElementById('pa').value = a;
   document.getElementById('preview').classList.add('show');
   document.getElementById('post-btn').disabled = false;
-  btn.disabled = false;
-  btn.textContent = '✦ 再度調整する';
+  document.getElementById('fmt-btn').textContent = '再度確認・編集する';
   setStep(3);
 }
 
 async function postToNotion() {
   const catVal = document.getElementById('category').value;
   const pageId = catVal.split('|')[1];
-  const title = currentTitle || document.getElementById('q-title').value.trim();
-  const fmtQ = document.getElementById('pq').value.trim();
-  const fmtA = document.getElementById('pa').value.trim();
+  const q = document.getElementById('pq').value.trim();
+  const a = document.getElementById('pa').value.trim();
 
   document.getElementById('post-btn').disabled = true;
   showStatus('loading', '投稿しています...');
 
-  const blocks = buildBlocks(`## Q\n\n${fmtQ}\n\n## A\n\n${fmtA}`);
+  // タイトルはQの最初の行から自動生成
+  const title = q.split('\n')[0].slice(0, 50);
 
   try {
-    const res = await fetch(WORKER_URL, {
+    const res = await fetch(WORKER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         parent: { page_id: pageId },
         icon: { type: 'emoji', emoji: '✔️' },
         properties: { title: { title: [{ text: { content: title } }] } },
-        children: blocks
+        children: [
+          {
+            object: 'block', type: 'paragraph',
+            paragraph: { rich_text: [
+              { type: 'text', text: { content: 'Q．' }, annotations: { bold: true } },
+              { type: 'text', text: { content: q } }
+            ]}
+          },
+          { object: 'block', type: 'paragraph', paragraph: { rich_text: [] } },
+          {
+            object: 'block', type: 'paragraph',
+            paragraph: { rich_text: [
+              { type: 'text', text: { content: 'A．' }, annotations: { bold: true } },
+              { type: 'text', text: { content: a } }
+            ]}
+          }
+        ]
       })
     });
     const data = await res.json();
@@ -228,30 +189,12 @@ async function postToNotion() {
       document.querySelector('#s3').className = 'step done';
       document.querySelector('#s3 .step-dot').textContent = '✓';
     } else {
-      throw new Error(data.message || '投稿に失敗しました');
+      throw new Error(data.message || JSON.stringify(data));
     }
   } catch(e) {
-    showStatus('error', '❌ エラー: ' + e.message);
+    showStatus('error', '❌ ' + e.message);
     document.getElementById('post-btn').disabled = false;
   }
-}
-
-function buildBlocks(md) {
-  const blocks = [];
-  const lines = md.split('\n');
-  for (const line of lines) {
-    if (line.startsWith('## ')) {
-      blocks.push({ object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: line.replace('## ', '') } }] } });
-    } else if (line.trim() === '') {
-      blocks.push({ object: 'block', type: 'paragraph', paragraph: { rich_text: [] } });
-    } else if (line.startsWith('- ') || line.match(/^\d+\. /)) {
-      const text = line.replace(/^- /, '').replace(/^\d+\. /, '');
-      blocks.push({ object: 'block', type: 'bulleted_list_item', bulleted_list_item: { rich_text: [{ type: 'text', text: { content: text } }] } });
-    } else {
-      blocks.push({ object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: line } }] } });
-    }
-  }
-  return blocks.slice(0, 100);
 }
 </script>
 </body>
